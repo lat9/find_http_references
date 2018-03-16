@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="../vinos_favicon.ico" type="image/x-icon" />
+<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<title>Find HTTP References</title>
+
+<style type="text/css">
+<!--
+a, a:active, a:visited { color: #006666; text-decoration: none; }
+a:hover { color:#00CC99; text-decoration: underline; }
+BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT, pre, code, img, table, #outer-container {
+  font-family: Roboto, Verdana, AvantGarde, Tahoma, Arial, sans-serif;
+  font-size: 12pt;
+  color: black;
+  padding: 0px;
+  margin: 20px;
+  line-height: 1.75em;
+}
+H1, H2, H3, H4 { font-weight: bold; }
+h1 { font-size: 20px; }
+h2 { font-size: 16px; }
+pre, code { padding: 0; margin: 0; font-family: Courier; font-size: 12pt; }
+pre.pad, code.pad { padding-left: 25px; }
+ol li, ul li, ul li ul li { margin: 5px 0; padding: 0; }
+img { margin: 0 20px; float: left; border: 1px solid #666; }
+img.wide { width: 95%; float: none; margin: 0 2.5%; }
+textarea { width: 100%; }
+.corefile, .red { color: red; }
+.template { color: green; }
+.forward { float: right; }
+.back { float: back; }
+.clearBoth { clear: both; }
+#buttons, #fa-buttons { margin-left: 20px; width: 300px; }
+#fa-buttons { margin-top: 5px; }
+table, td, th { border: 1px solid black; border-collapse: collapse; }
+td, th { padding: 5px; }
+th { background-color: #eee; }
+.smaller { font-size: smaller; }
+
+.etabs { margin: 0; padding: 0; }
+.tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; border-radius: 4px 4px 0 0; margin: 0; }
+.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+.tab a:hover { text-decoration: underline; }
+.tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
+.tab a.active { font-weight: bold; }
+.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; border-radius: 0 4px 4px 4px; }
+.panel-container { margin-bottom: 10px; }
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+<script src="../jquery-1.7.1.min.js" type="text/javascript"></script> 
+<script src="../jquery.easytabs.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(document).ready( function() {
+      $('#tab-container').easytabs();
+  });
+</script>
+</head>
+
+<body>
+  <h1>Find HTTP References <span class="smaller">for Zen Cart v1.5.4 (and later)</span></h1>
+  <h3>Version 1.0.0 by lat9.  Copyright &copy; 2017-2018, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noreferrer">Vinos de Frutas Tropicales</a></h3>
+  <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?221658-File-Auto-Versioning-Support-Thread">https://www.zen-cart.com/showthread.php?221658-File-Auto-Versioning-Support-Thread</a></p>
+
+  <div class="tab-container" id="outer-container">
+    <ul class="etabs">
+      <li class="tab"><a href="#overview">Overview</a></li>
+      <li class="tab"><a href="#usage">Usage</a></li>
+      <li class="tab"><a href="#version">Change History</a></li>
+    </ul>
+    <div class="panel-container">
+      <div id="overview">
+        <p>As more stores are migrating to an <em>https-all-the-time</em> presence (i.e. all storefront pages are accessed via <code>https://</code> protocol), many store-owners are facing the dreaded <em>mixed-content</em> messages from browsers when using that protocol.  That message is issued when pages secured by the <em>https</em> protocol pull in content from non-secure sources, i.e. those using the <code>http</code> protocol.</p>
+        <p>This plugin searches the site's language, module and template files and database categories' and products' names and descriptions and EZ-Pages' titles and content for all <b>http://</b> references, producing a file that contains a report of the locations of those references.  Once the site-owner knows where the offending references are, it's easier to get the site full-up https.</p>
+      </div>
+      
+      <div id="usage">
+        <p>This plugin is intended to be used as a <em>one-time</em> report, so its installation is a bit different.  Simply copy the plugin's single file (<code>find_http_references.php</code>) to the <em>root</em> directory of your store's file-system, using an FTP program (like WinSCP or FileZilla) or your webhost's cPanel's <em>File Manager</em>.  When you've copied the file, it should be located in the directory that also contains the site's <code>ipn_main_handler.php</code> file.</p>
+        <p>Once copied, you run the report by entering <code>www.your-store-name.com/find_http_references.php</code> &mdash; replacing the reference to <b>www.your-store-name.com</b> with your store's name &mdash; into a browser address-window and pressing the <code>Enter</code> key.  The script will run, creating the file <code>/logs/http_references.log</code>.</p>
+        <p><b>Note:</b> Since the tool is simply looking for the string <code>http://</code>, you might get some &quot;false positives&quot; if that string appears in plugin module comments.</p>
+        <p>After you've run the tool, creating that report, be sure to delete that .php file from your web-hosted file-system!</p>
+        </div>
+      </div>
+      
+      <div id="version">
+        <p>This section identifies the files added or modified for this plugin as well as the plugin's change history.</p>
+
+        <div class="tab-container" id="inner-container3">
+          <ul class="etabs">
+            <li class="tab"><a href="#changes">Change History</a></li>
+            <li class="tab"><a href="#files">File List</a></li>
+          </ul>
+          <div class="panel-container">
+            <div id="files">
+              <p>The plugin provides the following files in its distribution zip-file.</p>
+              <ol>
+                <li>find_http_references.php</li>
+              </ol>
+            </div>
+            
+            <div id="changes">
+              <ul>
+                <li>v1.0.0, 2018-03-16:<ul>
+                  <li>Initial public release.</li>
+                </ul></li>
+               </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $('#outer-container, #inner-container2, #inner-container3').easytabs();
+    
+    $( '.side-link' ).click( function() {
+        window.location.hash = $(this).attr( 'href' );
+        location.reload();
+    });
+  </script>
+
+</body>
+</html>
