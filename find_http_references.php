@@ -1,14 +1,14 @@
 <?php
 // -----
 // Find "HTTP" References in database and language elements.  Created by lat9.
-// Copyright (C) 2017-2018, Vinos de Frutas Tropicales https://vinosdefrutastropicales.com
+// Copyright (C) 2017-2020, Vinos de Frutas Tropicales https://vinosdefrutastropicales.com
 //
-include 'includes/application_top.php';
+require 'includes/application_top.php';
 
 // -----
 // We'll log the findings in /logs/http_references.log.
 //
-$logfile = DIR_FS_LOGS . '/http_references.log';
+$logfile = DIR_FS_LOGS . '/http_references_' . date('Ymd_His') . '.log';
 error_log('Finding http:// references, report run on ' . date('Y-m-d H:i:s') . PHP_EOL . PHP_EOL, 3, $logfile);
 
 echo "Searching for http:// references, v1.0.0 &hellip;<br /><br />";
@@ -97,12 +97,13 @@ if (!$descriptions->EOF) {
         if (stripos($descriptions->fields['products_description'], 'http://') !== false) {
             $references++;
             error_log("\t\t" . $descriptions->fields['products_name'] . ' [' . $descriptions->fields['products_id'] . '], language_id = ' . $descriptions->fields['language_id'] . PHP_EOL, 3, $logfile);
+            error_log("\t\t" . $descriptions->fields['products_description'] . PHP_EOL . PHP_EOL, 3, $logfile);
         }
         $descriptions->MoveNext();
     }
     $message = "Found $references in the product descriptions.";
     echo "$message<br />";
-    error_log($messages . PHP_EOL . PHP_EOL, 3, $logfile);
+    error_log($message . PHP_EOL . PHP_EOL, 3, $logfile);
 }
 unset($descriptions);
 
@@ -121,6 +122,7 @@ if (!$descriptions->EOF) {
         if (stripos($descriptions->fields['categories_description'], 'http://') !== false) {
             $references++;
             error_log("\t\t" . $descriptions->fields['categories_name'] . ' [' . $descriptions->fields['categories_id'] . '], language_id = ' . $descriptions->fields['language_id'] . PHP_EOL, 3, $logfile);
+            error_log("\t\t" . $descriptions->fields['categories_description'] . PHP_EOL . PHP_EOL, 3, $logfile);
         }
         $descriptions->MoveNext();
     }
@@ -132,11 +134,14 @@ unset($descriptions);
 
 // -----
 // Finally, check for http:// references in EZ-Pages' titles and html-text ...
+// noting that those values are stored in the ezpages_content table (if present) or
+// the ezpages (prior to zc156) otherwise.
 //
+$ezpages_table = (defined('TABLE_EZPAGES_CONTENT') && $sniffer->table_exists(TABLE_EZPAGES_CONTENT)) ? TABLE_EZPAGES_CONTENT : TABLE_EZPAGES;
 $ezpages = $db->Execute(
     "SELECT pages_id, languages_id, pages_title, pages_html_text
-       FROM " . TABLE_EZPAGES . "
-   ORDER BY pages_title ASC, pages_id"
+       FROM $ezpages_table
+   ORDER BY pages_id ASC"
 );
 if (!$ezpages->EOF) {
     error_log('Inspecting ' . $ezpages->RecordCount() . ' EZ-Pages ...' . PHP_EOL, 3, $logfile);
@@ -145,6 +150,7 @@ if (!$ezpages->EOF) {
         if (stripos($ezpages->fields['pages_html_text'], 'http://') !== false) {
             $references++;
             error_log("\t\t" . $ezpages->fields['pages_title'] . ' [' . $ezpages->fields['pages_id'] . '], languages_id = ' . $ezpages->fields['languages_id'] . PHP_EOL, 3, $logfile);
+            error_log("\t\t" . $ezpages->fields['pages_html_text'] . PHP_EOL . PHP_EOL, 3, $logfile);
         }
         $ezpages->MoveNext();
     }
@@ -156,4 +162,4 @@ unset($ezpages);
 
 echo "<br /><br />All finished, if additional messages were displayed above this message, check $logfile for details.";
 
-include 'includes/application_bottom.php';
+require 'includes/application_bottom.php';

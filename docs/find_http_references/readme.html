@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<htm>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" href="../vinos_favicon.ico" type="image/x-icon" />
 <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -62,7 +62,7 @@ th { background-color: #eee; }
 
 <body>
   <h1>Find HTTP References <span class="smaller">for Zen Cart v1.5.4 (and later)</span></h1>
-  <h3>Version 1.0.0 by lat9.  Copyright &copy; 2017-2018, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noreferrer">Vinos de Frutas Tropicales</a></h3>
+  <h3>Version 2.0.0 by lat9.  Copyright &copy; 2017-2020, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noreferrer">Vinos de Frutas Tropicales</a></h3>
   <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?223743-Find-http-references-Support-Thread">https://www.zen-cart.com/showthread.php?223743-Find-http-references-Support-Thread</a></p>
 
   <div class="tab-container" id="outer-container">
@@ -79,7 +79,7 @@ th { background-color: #eee; }
       
       <div id="usage">
         <p>This plugin is intended to be used as a <em>one-time</em> report, so its installation is a bit different.  Simply copy the plugin's single file (<code>find_http_references.php</code>) to the <em>root</em> directory of your store's file-system, using an FTP program (like WinSCP or FileZilla) or your webhost's cPanel's <em>File Manager</em>.  When you've copied the file, it should be located in the directory that also contains the site's <code>ipn_main_handler.php</code> file.</p>
-        <p>Once copied, you run the report by entering <code>www.your-store-name.com/find_http_references.php</code> &mdash; replacing the reference to <b>www.your-store-name.com</b> with your store's name &mdash; into a browser address-window and pressing the <code>Enter</code> key.  The script will run, creating the file <code>/logs/http_references.log</code>.</p>
+        <p>Once copied, you run the report by entering <code>www.your-store-name.com/find_http_references.php</code> &mdash; replacing the reference to <b>www.your-store-name.com</b> with your store's name &mdash; into a browser address-window and pressing the <code>Enter</code> key.  The script will run, creating the file <code>/logs/http_references_YYYYMMDD_HHIISS.log</code>.</p>
         <p><b>Note:</b> Since the tool is simply looking for the string <code>http://</code>, you might get some &quot;false positives&quot; if that string appears in plugin module comments.</p>
         <p>After you've run the tool, creating that report, be sure to delete that .php file from your web-hosted file-system!</p>
         </div>
@@ -103,6 +103,13 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
+                <li>v2.0.0, 2020-07-09:<ul>
+                  <li>BUGFIX: zc156+ interoperation; EZ-Pages content table added.</li>
+                  <li>CHANGE: Capture http-containing database content as part of the output report.</li>
+                  <li>The following file was changed:<ol>
+                    <li>find_http_references.php</li>
+                  </ol></li>
+                </ul></li>
                 <li>v1.0.0, 2018-03-16:<ul>
                   <li>Initial public release.</li>
                 </ul></li>
