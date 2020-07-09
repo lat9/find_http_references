@@ -5,13 +5,22 @@
 //
 require 'includes/application_top.php';
 
+$references_to_ignore = array(
+    'http://www.zen-cart',
+    'http://www.oscommerce',
+);
+if (defined('HTTP_REFERENCES_TO_IGNORE') && !empty(HTTP_REFERENCES_TO_IGNORE)) {
+    $additional_references_to_ignore = explode(',', str_replace(' ', '', HTTP_REFERENCES_TO_IGNORE));
+    $references_to_ignore = array_merge($references_to_ignore, $additional_references_to_ignore);
+}
+
 // -----
 // We'll log the findings in /logs/http_references.log.
 //
 $logfile = DIR_FS_LOGS . '/http_references_' . date('Ymd_His') . '.log';
 error_log('Finding http:// references, report run on ' . date('Y-m-d H:i:s') . PHP_EOL . PHP_EOL, 3, $logfile);
 
-echo "Searching for http:// references, v1.0.0 &hellip;<br /><br />";
+echo 'Searching for http:// references, v1.0.0 &hellip; other than <b>' . implode(', ', $references_to_ignore) . '</b><br><br>';
 
 // -----
 // First, look in the various language-related directories for http:// references, discounting
@@ -26,7 +35,7 @@ $language_directory = substr($language_directory, 0, -1);
 error_log('Inspecting ' . DIR_FS_CATALOG . DIR_WS_LANGUAGES . ', all .php files ...' . PHP_EOL, 3, $logfile);
 foreach($php_files as $name => $object){
     $file_info = file_get_contents($name);
-    if (stripos(str_replace(array('http://www.zen-cart', 'http://www.oscommerce'), '', $file_info), 'http://') !== false) {
+    if (stripos(str_replace($references_to_ignore, '', $file_info), 'http://') !== false) {
         $references++;
         error_log("\t\t" . str_replace($language_directory, '', $name) . PHP_EOL, 3, $logfile);
     }
@@ -49,7 +58,7 @@ $modules_directory = substr($modules_directory, 0, -1);
 error_log('Inspecting ' . DIR_FS_CATALOG . DIR_WS_MODULES . ', all .php files ...' . PHP_EOL, 3, $logfile);
 foreach($php_files as $name => $object){
     $file_info = file_get_contents($name);
-    if (stripos(str_replace(array('http://www.zen-cart', 'http://www.oscommerce'), '', $file_info), 'http://') !== false) {
+    if (stripos(str_replace($references_to_ignore, '', $file_info), 'http://') !== false) {
         $references++;
         error_log("\t\t" . str_replace($modules_directory, '', $name) . PHP_EOL, 3, $logfile);
     }
@@ -72,7 +81,7 @@ $template_directory = substr($template_directory, 0, -1);
 error_log('Inspecting ' . DIR_FS_CATALOG . DIR_WS_TEMPLATES . ', all .php files ...' . PHP_EOL, 3, $logfile);
 foreach($php_files as $name => $object){
     $file_info = file_get_contents($name);
-    if (stripos(str_replace(array('http://www.zen-cart', 'http://www.oscommerce'), '', $file_info), 'http://') !== false) {
+    if (stripos(str_replace($references_to_ignore, '', $file_info), 'http://') !== false) {
         $references++;
         error_log("\t\t" . str_replace($template_directory, '', $name) . PHP_EOL, 3, $logfile);
     }

@@ -98,6 +98,7 @@ th { background-color: #eee; }
               <p>The plugin provides the following files in its distribution zip-file.</p>
               <ol>
                 <li>find_http_references.php</li>
+                <li>/includes/extra_configures/http_references_to_ignore.php <span class="smaller">(Added in v2.0.0)</span></li>
               </ol>
             </div>
             
@@ -106,8 +107,10 @@ th { background-color: #eee; }
                 <li>v2.0.0, 2020-07-09:<ul>
                   <li>BUGFIX: zc156+ interoperation; EZ-Pages content table added.</li>
                   <li>CHANGE: Capture http-containing database content as part of the output report.</li>
-                  <li>The following file was changed:<ol>
+                  <li>CHANGE: Additional 'configuration' file contains additional, ignorable http:// references.</li>
+                  <li>The following file was changed/added:<ol>
                     <li>find_http_references.php</li>
+                    <li>/includes/extra_configures/http_references_to_ignore.php</li>
                   </ol></li>
                 </ul></li>
                 <li>v1.0.0, 2018-03-16:<ul>
